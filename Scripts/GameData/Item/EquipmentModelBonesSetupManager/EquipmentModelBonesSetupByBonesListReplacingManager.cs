@@ -31,21 +31,35 @@ namespace MultiplayerARPG
                 return;
             }
 
+            SkinnedMeshRenderer defaultSkinnedMesh = null;
+            if (equipmentContainer.defaultModel != null)
+                defaultSkinnedMesh = equipmentContainer.defaultModel.GetComponentInChildren<SkinnedMeshRenderer>();
             SkinnedMeshRenderer skinnedMeshRenderer = skinnedMeshSrc.SkinnedMeshRenderer;
-            SkinnedMeshRenderer skinnedMesh = instantiatedObject.GetComponentInChildren<SkinnedMeshRenderer>();
-            if (skinnedMesh != null && skinnedMeshRenderer != null)
+            if (defaultSkinnedMesh == null && skinnedMeshRenderer == null)
             {
-                skinnedMesh.bones = skinnedMeshRenderer.bones;
-                skinnedMesh.rootBone = skinnedMeshRenderer.rootBone;
-                if (equipmentContainer.defaultModel != null)
-                {
-                    SkinnedMeshRenderer defaultSkinnedMesh = equipmentContainer.defaultModel.GetComponentInChildren<SkinnedMeshRenderer>();
-                    if (defaultSkinnedMesh != null)
-                    {
-                        skinnedMesh.bones = defaultSkinnedMesh.bones;
-                        skinnedMesh.rootBone = defaultSkinnedMesh.rootBone;
-                    }
-                }
+                Debug.LogWarning($"[{nameof(EquipmentModelBonesSetupByBonesListReplacingManager)}] Cannot setup bones for \"{instantiatedObject}\", character model \"{characterModel}\" and equipment container has no skinned mesh renderer");
+                return;
+            }
+            Transform[] bones = null;
+            Transform rootBone = null;
+            if (defaultSkinnedMesh != null)
+            {
+                bones = defaultSkinnedMesh.bones;
+                rootBone = defaultSkinnedMesh.rootBone;
+            }
+            else if (skinnedMeshRenderer != null)
+            {
+                bones = skinnedMeshRenderer.bones;
+                rootBone = skinnedMeshRenderer.rootBone;
+            }
+            SkinnedMeshRenderer[] skinnedMeshes = instantiatedObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+            for (int i = 0; i < skinnedMeshes.Length; ++i)
+            {
+                SkinnedMeshRenderer skinnedMesh = skinnedMeshes[i];
+                if (skinnedMesh == null)
+                    continue;
+                skinnedMesh.bones = bones;
+                skinnedMesh.rootBone = rootBone;
             }
         }
     }
