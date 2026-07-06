@@ -5,6 +5,9 @@ namespace MultiplayerARPG
     [CreateAssetMenu(fileName = GameDataMenuConsts.EQUIPMENT_MODEL_BONES_SETUP_BY_BONES_LIST_REPLACING_MANAGER_FILE, menuName = GameDataMenuConsts.EQUIPMENT_MODEL_BONES_SETUP_BY_BONES_LIST_REPLACING_MANAGER_MENU, order = GameDataMenuConsts.EQUIPMENT_MODEL_BONES_SETUP_BY_BONES_LIST_REPLACING_MANAGER_ORDER)]
     public class EquipmentModelBonesSetupByBonesListReplacingManager : BaseEquipmentModelBonesSetupManager
     {
+        public bool changeRootBone = false;
+        public bool changeLocalBounds = false;
+
         public override void Setup(BaseCharacterModel characterModel, EquipmentModel equipmentModel, GameObject instantiatedObject, BaseEquipmentEntity instantiatedEntity, EquipmentInstantiatedObjectGroup instantiatedObjectGroup, EquipmentContainer equipmentContainer)
         {
             if (GameInstance.Singleton.DimensionType != DimensionType.Dimension3D)
@@ -41,13 +44,19 @@ namespace MultiplayerARPG
                 return;
             }
             Transform[] bones = null;
+            Transform rootBone = null;
+            Bounds? bounds = null;
             if (defaultSkinnedMesh != null)
             {
                 bones = defaultSkinnedMesh.bones;
+                rootBone = defaultSkinnedMesh.rootBone;
+                bounds = defaultSkinnedMesh.localBounds;
             }
             else if (skinnedMeshRenderer != null)
             {
                 bones = skinnedMeshRenderer.bones;
+                rootBone = skinnedMeshRenderer.rootBone;
+                bounds = defaultSkinnedMesh.localBounds;
             }
             SkinnedMeshRenderer[] skinnedMeshes = instantiatedObject.GetComponentsInChildren<SkinnedMeshRenderer>();
             for (int i = 0; i < skinnedMeshes.Length; ++i)
@@ -56,6 +65,10 @@ namespace MultiplayerARPG
                 if (skinnedMesh == null)
                     continue;
                 skinnedMesh.bones = bones;
+                if (changeRootBone && rootBone != null)
+                    skinnedMesh.rootBone = rootBone;
+                if (changeLocalBounds && bounds.HasValue)
+                    skinnedMesh.localBounds = bounds.Value;
             }
         }
     }

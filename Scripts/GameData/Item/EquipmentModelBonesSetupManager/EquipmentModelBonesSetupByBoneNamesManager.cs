@@ -6,6 +6,9 @@ namespace MultiplayerARPG
     [CreateAssetMenu(fileName = GameDataMenuConsts.EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_MANAGER_FILE, menuName = GameDataMenuConsts.EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_MANAGER_MENU, order = GameDataMenuConsts.EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_MANAGER_ORDER)]
     public class EquipmentModelBonesSetupByBoneNamesManager : BaseEquipmentModelBonesSetupManager
     {
+        public bool changeRootBone = false;
+        public bool changeLocalBounds = false;
+
         public override void Setup(BaseCharacterModel characterModel, EquipmentModel equipmentModel, GameObject instantiatedObject, BaseEquipmentEntity instantiatedEntity, EquipmentInstantiatedObjectGroup instantiatedObjectGroup, EquipmentContainer equipmentContainer)
         {
             if (GameInstance.Singleton.DimensionType != DimensionType.Dimension3D)
@@ -44,13 +47,19 @@ namespace MultiplayerARPG
 
             // Prepare bone maps by get bones from skinned mesh renderer
             Dictionary<string, Transform> bonesMap = new Dictionary<string, Transform>();
+            Transform rootBone = null;
+            Bounds? bounds = null;
             if (defaultSkinnedMesh != null)
             {
                 StoreToBoneMap(defaultSkinnedMesh, bonesMap);
+                rootBone = defaultSkinnedMesh.rootBone;
+                bounds = defaultSkinnedMesh.localBounds;
             }
             else if (skinnedMeshRenderer != null)
             {
                 StoreToBoneMap(skinnedMeshRenderer, bonesMap);
+                rootBone = skinnedMeshRenderer.rootBone;
+                bounds = defaultSkinnedMesh.localBounds;
             }
             SkinnedMeshRenderer[] skinnedMeshes = instantiatedObject.GetComponentsInChildren<SkinnedMeshRenderer>();
             for (int i = 0; i < skinnedMeshes.Length; ++i)
@@ -72,6 +81,10 @@ namespace MultiplayerARPG
                     Debug.LogWarning($"[{nameof(EquipmentModelBonesSetupByBoneNamesManager)}] {instantiatedObject} unable to find mapped bone for \"{newBone}\"");
                 }
                 skinnedMesh.bones = newBones;
+                if (changeRootBone && rootBone != null)
+                    skinnedMesh.rootBone = rootBone;
+                if (changeLocalBounds && bounds.HasValue)
+                    skinnedMesh.localBounds = bounds.Value;
             }
         }
 
