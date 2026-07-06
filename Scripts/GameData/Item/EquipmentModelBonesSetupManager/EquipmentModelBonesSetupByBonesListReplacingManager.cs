@@ -41,16 +41,13 @@ namespace MultiplayerARPG
                 return;
             }
             Transform[] bones = null;
-            Transform rootBone = null;
             if (defaultSkinnedMesh != null)
             {
                 bones = defaultSkinnedMesh.bones;
-                rootBone = defaultSkinnedMesh.rootBone;
             }
             else if (skinnedMeshRenderer != null)
             {
                 bones = skinnedMeshRenderer.bones;
-                rootBone = skinnedMeshRenderer.rootBone;
             }
             SkinnedMeshRenderer[] skinnedMeshes = instantiatedObject.GetComponentsInChildren<SkinnedMeshRenderer>();
             for (int i = 0; i < skinnedMeshes.Length; ++i)
@@ -59,7 +56,6 @@ namespace MultiplayerARPG
                 if (skinnedMesh == null)
                     continue;
                 skinnedMesh.bones = bones;
-                skinnedMesh.rootBone = rootBone;
             }
         }
     }

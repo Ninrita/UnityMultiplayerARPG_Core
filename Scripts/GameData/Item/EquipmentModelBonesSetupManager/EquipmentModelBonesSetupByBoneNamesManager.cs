@@ -44,16 +44,13 @@ namespace MultiplayerARPG
 
             // Prepare bone maps by get bones from skinned mesh renderer
             Dictionary<string, Transform> bonesMap = new Dictionary<string, Transform>();
-            Transform rootBone = null;
             if (defaultSkinnedMesh != null)
             {
                 StoreToBoneMap(defaultSkinnedMesh, bonesMap);
-                rootBone = defaultSkinnedMesh.rootBone;
             }
             else if (skinnedMeshRenderer != null)
             {
                 StoreToBoneMap(skinnedMeshRenderer, bonesMap);
-                rootBone = skinnedMeshRenderer.rootBone;
             }
             SkinnedMeshRenderer[] skinnedMeshes = instantiatedObject.GetComponentsInChildren<SkinnedMeshRenderer>();
             for (int i = 0; i < skinnedMeshes.Length; ++i)
@@ -75,8 +72,6 @@ namespace MultiplayerARPG
                     Debug.LogWarning($"[{nameof(EquipmentModelBonesSetupByBoneNamesManager)}] {instantiatedObject} unable to find mapped bone for \"{newBone}\"");
                 }
                 skinnedMesh.bones = newBones;
-                if (rootBone != null && string.Equals(rootBone.name, skinnedMesh.rootBone.name))
-                    skinnedMesh.rootBone = rootBone;
             }
         }
 
