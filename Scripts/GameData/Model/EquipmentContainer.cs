@@ -4,18 +4,18 @@ namespace MultiplayerARPG
 {
 
     [System.Serializable]
-    public struct EquipmentContainer
+    public partial class EquipmentContainer
     {
         public string equipSocket;
         public Transform transform;
 
         [Header("Single instantiated object setting")]
         public GameObject defaultModel;
-        public GameObject[] instantiatedObjects;
+        public GameObject[] instantiatedObjects = new GameObject[0];
 
         [Header("Multiple instantiated objects setting")]
         public EquipmentInstantiatedObjectGroup defaultInstantiatedObjectGroup;
-        public EquipmentInstantiatedObjectGroup[] instantiatedObjectGroups;
+        public EquipmentInstantiatedObjectGroup[] instantiatedObjectGroups = new EquipmentInstantiatedObjectGroup[0];
 
 #if UNITY_EDITOR
         [Header("Testing tools")]
