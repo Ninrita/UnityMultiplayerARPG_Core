@@ -7,7 +7,6 @@ namespace MultiplayerARPG
     public class EquipmentModelBonesSetupByBoneNamesManager : BaseEquipmentModelBonesSetupManager
     {
         public bool changeRootBone = false;
-        public bool changeLocalBounds = false;
 
         public override void Setup(BaseCharacterModel characterModel, EquipmentModel equipmentModel, GameObject instantiatedObject, BaseEquipmentEntity instantiatedEntity, EquipmentInstantiatedObjectGroup instantiatedObjectGroup, EquipmentContainer equipmentContainer)
         {
@@ -35,31 +34,26 @@ namespace MultiplayerARPG
                 return;
             }
 
-            SkinnedMeshRenderer defaultSkinnedMesh = null;
-            if (equipmentContainer.defaultModel != null)
-                defaultSkinnedMesh = equipmentContainer.defaultModel.GetComponentInChildren<SkinnedMeshRenderer>();
+            SkinnedMeshRenderer defaultSkinnedMesh = equipmentContainer.CachedDefaultModelSkinnedMesh;
             SkinnedMeshRenderer skinnedMeshRenderer = skinnedMeshSrc.SkinnedMeshRenderer;
             if (defaultSkinnedMesh == null && skinnedMeshRenderer == null)
             {
-                Debug.LogWarning($"[{nameof(EquipmentModelBonesSetupByBonesListReplacingManager)}] Cannot setup bones for \"{instantiatedObject}\", character model \"{characterModel}\" and equipment container has no skinned mesh renderer");
+                Debug.LogWarning($"[{nameof(EquipmentModelBonesSetupByBoneNamesManager)}] Cannot setup bones for \"{instantiatedObject}\", character model \"{characterModel}\" and equipment container has no skinned mesh renderer");
                 return;
             }
 
             // Prepare bone maps by get bones from skinned mesh renderer
             Dictionary<string, Transform> bonesMap = new Dictionary<string, Transform>();
             Transform rootBone = null;
-            Bounds? bounds = null;
             if (defaultSkinnedMesh != null)
             {
                 StoreToBoneMap(defaultSkinnedMesh, bonesMap);
                 rootBone = defaultSkinnedMesh.rootBone;
-                bounds = defaultSkinnedMesh.localBounds;
             }
             else if (skinnedMeshRenderer != null)
             {
                 StoreToBoneMap(skinnedMeshRenderer, bonesMap);
                 rootBone = skinnedMeshRenderer.rootBone;
-                bounds = defaultSkinnedMesh.localBounds;
             }
             SkinnedMeshRenderer[] skinnedMeshes = instantiatedObject.GetComponentsInChildren<SkinnedMeshRenderer>();
             for (int i = 0; i < skinnedMeshes.Length; ++i)
@@ -83,8 +77,6 @@ namespace MultiplayerARPG
                 skinnedMesh.bones = newBones;
                 if (changeRootBone && rootBone != null)
                     skinnedMesh.rootBone = rootBone;
-                if (changeLocalBounds && bounds.HasValue)
-                    skinnedMesh.localBounds = bounds.Value;
             }
         }
 

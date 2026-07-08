@@ -32,6 +32,23 @@ namespace MultiplayerARPG
             }
         }
 
+        public void SetupForObject(BaseCharacterModel characterModel, GameObject instantiatedObject, EquipmentContainer equipmentContainer)
+        {
+            if (equipmentContainer != null && equipmentContainer.CachedDefaultModelAnimator != null)
+            {
+                PrepareTransforms(equipmentContainer.CachedDefaultModelAnimator, instantiatedObject.GetComponentInChildren<Animator>());
+            }
+            else
+            {
+                if (!(characterModel is IModelWithAnimator animatorSrc))
+                {
+                    Debug.LogWarning($"[{nameof(EquipmentModelBonesSetupByBoneNamesManager)}] Cannot setup bones for \"{instantiatedObject}\", character model \"{characterModel}\" is not a model with animator");
+                    return;
+                }
+                PrepareTransforms(animatorSrc.Animator, instantiatedObject.GetComponentInChildren<Animator>());
+            }
+        }
+
         public void PrepareTransforms(Animator src, Animator dst)
         {
 #if !UNITY_SERVER
@@ -51,13 +68,15 @@ namespace MultiplayerARPG
             {
                 HumanBodyBones bone = (HumanBodyBones)i;
                 // Add all bones althrough it is null
-                Transform srcTransform = src.GetBoneTransform(bone);
+                // Priority: predefined bones > bones from src animator
+                Transform srcTransform;
+                if (!PredefinedBonesDict.TryGetValue(bone, out srcTransform))
+                    srcTransform = src.GetBoneTransform(bone);
                 srcTransforms[i] = srcTransform;
 
                 // Priority: predefined bones > bones from dst animator
                 Transform dstTransform;
-                if (!PredefinedBonesDict.TryGetValue(bone, out dstTransform))
-                    dstTransform = dst.GetBoneTransform(bone);
+                dstTransform = dst.GetBoneTransform(bone);
                 dstTransforms[i] = dstTransform;
             }
 

@@ -211,9 +211,13 @@ namespace MultiplayerARPG
         public const string EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_MANAGER_MENU = "Create GameData/Equipment Model Bones Setup Manager/Equipment Model Bones Setup By Bone Names Manager";
         public const int EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_MANAGER_ORDER = -5593;
 
-        public const string EQUIPMENT_MODEL_BONES_SETUP_BY_BONES_LIST_REPLACING_MANAGER_FILE = "Equipment Model Bones Setup By Bones List Replacing Manager";
-        public const string EQUIPMENT_MODEL_BONES_SETUP_BY_BONES_LIST_REPLACING_MANAGER_MENU = "Create GameData/Equipment Model Bones Setup Manager/Equipment Model Bones Setup By Bones List Replacing Manager";
-        public const int EQUIPMENT_MODEL_BONES_SETUP_BY_BONES_LIST_REPLACING_MANAGER_ORDER = -5592;
+        public const string EQUIPMENT_MODEL_BONES_SETUP_BY_HUMAN_BODY_BONES_V2_MANAGER_FILE = "Equipment Model Bones Setup By Human Body Bones V2 Manager";
+        public const string EQUIPMENT_MODEL_BONES_SETUP_BY_HUMAN_BODY_BONES_V2_MANAGER_MENU = "Create GameData/Equipment Model Bones Setup Manager/Equipment Model Bones Setup By Human Body Bones V2 Manager";
+        public const int EQUIPMENT_MODEL_BONES_SETUP_BY_HUMAN_BODY_BONES_V2_MANAGER_ORDER = -5592;
+
+        public const string EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_V2_MANAGER_FILE = "Equipment Model Bones Setup By Bone Names V2 Manager";
+        public const string EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_V2_MANAGER_MENU = "Create GameData/Equipment Model Bones Setup Manager/Equipment Model Bones Setup By Bone Names V2 Manager";
+        public const int EQUIPMENT_MODEL_BONES_SETUP_BY_BONE_NAMES_V2_MANAGER_ORDER = -5591;
 
         public const string AMMO_TYPE_FILE = "Ammo Type";
         public const string AMMO_TYPE_MENU = "Create GameData/Ammo Type";

@@ -23,6 +23,18 @@ namespace MultiplayerARPG
         public int activatingInstantiateObjectIndex;
 #endif
 
+        private readonly LazyComponentCache<Animator> _cachedDefaultModelAnimator = new LazyComponentCache<Animator>();
+        public Animator CachedDefaultModelAnimator
+        {
+            get => _cachedDefaultModelAnimator.Get(defaultModel);
+        }
+
+        private readonly LazyComponentCache<SkinnedMeshRenderer> _cachedDefaultModelSkinnedMesh = new LazyComponentCache<SkinnedMeshRenderer>();
+        public SkinnedMeshRenderer CachedDefaultModelSkinnedMesh
+        {
+            get => _cachedDefaultModelSkinnedMesh.Get(defaultModel);
+        }
+
         public void SetActiveDefaultModel(bool isActive)
         {
             if (defaultModel == null || defaultModel.activeSelf == isActive)

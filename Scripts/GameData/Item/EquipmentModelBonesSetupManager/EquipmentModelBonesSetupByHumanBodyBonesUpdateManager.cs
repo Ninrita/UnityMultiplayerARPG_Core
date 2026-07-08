@@ -25,11 +25,11 @@ namespace MultiplayerARPG
 
         [Tooltip("0 = not null, 1 = null")]
         public byte copyScale = 0;
-        private readonly Dictionary<int, Transform[]> _allSrc = new Dictionary<int, Transform[]>();
-        private readonly Dictionary<int, NativeArray<TransformData>> _allNSrc = new Dictionary<int, NativeArray<TransformData>>();
-        private readonly Dictionary<int, DstData> _allDst = new Dictionary<int, DstData>();
-        private readonly HashSet<int> _destroyedSrcIds = new HashSet<int>();
-        private readonly HashSet<int> _destroyedDstIds = new HashSet<int>();
+        private readonly Dictionary<uint, Transform[]> _allSrc = new Dictionary<uint, Transform[]>();
+        private readonly Dictionary<uint, NativeArray<TransformData>> _allNSrc = new Dictionary<uint, NativeArray<TransformData>>();
+        private readonly Dictionary<uint, DstData> _allDst = new Dictionary<uint, DstData>();
+        private readonly HashSet<uint> _destroyedSrcIds = new HashSet<uint>();
+        private readonly HashSet<uint> _destroyedDstIds = new HashSet<uint>();
         private JobHandle _jobHandle;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -111,7 +111,7 @@ namespace MultiplayerARPG
             _jobHandle.Complete();
 
             // Remove destroyed sources
-            foreach (int id in _destroyedSrcIds)
+            foreach (uint id in _destroyedSrcIds)
             {
                 if (_allNSrc.TryGetValue(id, out NativeArray<TransformData> srcNList))
                 {
@@ -125,7 +125,7 @@ namespace MultiplayerARPG
             _destroyedSrcIds.Clear();
 
             // Remove destroyed destinations
-            foreach (int id in _destroyedDstIds)
+            foreach (uint id in _destroyedDstIds)
             {
                 if (_allDst.TryGetValue(id, out DstData dstData))
                 {
@@ -136,9 +136,15 @@ namespace MultiplayerARPG
             }
             _destroyedDstIds.Clear();
 
-            foreach (KeyValuePair<int, Transform[]> srcKvp in _allSrc)
+            if (_allDst.Count <= 0)
             {
-                int srcId = srcKvp.Key;
+                _jobHandle = default;
+                return;
+            }
+
+            foreach (KeyValuePair<uint, Transform[]> srcKvp in _allSrc)
+            {
+                uint srcId = srcKvp.Key;
                 if (!_allNSrc.TryGetValue(srcId, out NativeArray<TransformData> srcNList))
                     continue;
                 Transform[] srcTransforms = srcKvp.Value;
@@ -162,7 +168,7 @@ namespace MultiplayerARPG
             }
             JobHandle combinedHandle = default;
             bool hasJob = false;
-            foreach (KeyValuePair<int, DstData> dstKvp in _allDst)
+            foreach (KeyValuePair<uint, DstData> dstKvp in _allDst)
             {
                 if (!_allNSrc.TryGetValue(dstKvp.Value.srcId, out NativeArray<TransformData> srcNList))
                     continue;
@@ -223,7 +229,7 @@ namespace MultiplayerARPG
         [BurstCompile]
         private struct DstData
         {
-            public int srcId;
+            public uint srcId;
             public TransformAccessArray dstArray;
         }
     }
