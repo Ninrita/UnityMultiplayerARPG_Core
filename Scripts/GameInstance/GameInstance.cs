@@ -461,7 +461,7 @@ namespace MultiplayerARPG
         public bool disableDealing = false;
         [Tooltip("If this is > 0, it will limit amount of vending items")]
         public int vendingItemsLimit = 16;
-        [Tooltip("If this is `TRUE`, vending feature will be disabled, all players won't be able to deal items to each other")]
+        [Tooltip("If this is `TRUE`, vending feature will be disabled")]
         public bool disableVending = false;
         [Tooltip("If dueling request does not accepted within this duration, the request will be cancelled")]
         public float duelingRequestDuration = 5f;
@@ -469,7 +469,7 @@ namespace MultiplayerARPG
         public float duelingCountDownDuration = 3f;
         [Tooltip("Dueling duration (in seconds)")]
         public float duelingDuration = 60f * 3f;
-        [Tooltip("If this is `TRUE`, dueling feature will be disabled, all players won't be able to deal items to each other")]
+        [Tooltip("If this is `TRUE`, dueling feature will be disabled, all players won't be able to duel with each other")]
         public bool disableDueling = false;
         [Tooltip("This is a distance that allows a player to pick up an item")]
         public float pickUpItemDistance = 1f;
