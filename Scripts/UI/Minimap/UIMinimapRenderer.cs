@@ -387,8 +387,7 @@ namespace MultiplayerARPG
 
         protected void InstantiateEntitiesMarkers()
         {
-            if (onInstantiateEntitiesMarkersStart != null)
-                onInstantiateEntitiesMarkersStart.Invoke();
+            onInstantiateEntitiesMarkersStart?.Invoke();
 
             if (GameInstance.PlayingCharacterEntity != null)
             {
@@ -409,19 +408,19 @@ namespace MultiplayerARPG
                     {
                         markerPrefab = partyMemberMarkerPrefab;
                         markerRotateOffsets = partyMemberRotateOffsets;
-                        onInstantiatePartyMemberMarker.Invoke(entry.ObjectId);
+                        onInstantiatePartyMemberMarker?.Invoke(entry.ObjectId);
                     }
                     else if (guildMemberMarkerPrefab != null && entityInfo.GuildId > 0 && entityInfo.GuildId == GameInstance.PlayingCharacterEntity.GuildId)
                     {
                         markerPrefab = guildMemberMarkerPrefab;
                         markerRotateOffsets = guildMemberRotateOffsets;
-                        onInstantiateGuildMemberMarker.Invoke(entry.ObjectId);
+                        onInstantiateGuildMemberMarker?.Invoke(entry.ObjectId);
                     }
                     else if (allyMemberMarkerPrefab != null)
                     {
                         markerPrefab = allyMemberMarkerPrefab;
                         markerRotateOffsets = allyMemberRotateOffsets;
-                        onInstantiateAllyMemberMarker.Invoke(entry.ObjectId);
+                        onInstantiateAllyMemberMarker?.Invoke(entry.ObjectId);
                     }
                     if (markerPrefab != null)
                     {
@@ -437,13 +436,13 @@ namespace MultiplayerARPG
                     {
                         markerPrefab = enemyMarkerPrefab;
                         markerRotateOffsets = enemyRotateOffsets;
-                        onInstantiateEnemyMarker.Invoke(entry.ObjectId);
+                        onInstantiateEnemyMarker?.Invoke(entry.ObjectId);
                     }
                     else if (neutralMarkerPrefab != null)
                     {
                         markerPrefab = neutralMarkerPrefab;
                         markerRotateOffsets = neutralRotateOffsets;
-                        onInstantiateNeutralMarker.Invoke(entry.ObjectId);
+                        onInstantiateNeutralMarker?.Invoke(entry.ObjectId);
                     }
                     if (markerPrefab != null)
                     {
@@ -452,8 +451,7 @@ namespace MultiplayerARPG
                 }
             }
 
-            if (onInstantiateEntitiesMarkersFinish != null)
-                onInstantiateEntitiesMarkersFinish.Invoke();
+            onInstantiateEntitiesMarkersFinish?.Invoke();
         }
 
         public void InstantiateEntityMarker(BaseCharacterEntity character, Vector3 markerRotateOffsets, float sizeRate, RectTransform prefab)
