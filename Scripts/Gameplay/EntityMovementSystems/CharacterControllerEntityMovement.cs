@@ -406,7 +406,7 @@ namespace MultiplayerARPG
             float deltaTime = Time.deltaTime;
             Functions.FixSwimUpPosition(deltaTime);
             if (skinWidthAdjustTarget != null)
-                skinWidthAdjustTarget.localPosition = CacheCharacterController.enabled ? -CacheCharacterController.skinWidth * Vector3.up : Vector3.zero;
+                skinWidthAdjustTarget.localPosition = -CacheCharacterController.skinWidth * Vector3.up;
             CacheCapsuleCollider.radius = CacheCharacterController.radius;
             CacheCapsuleCollider.height = CacheCharacterController.height;
             CacheCapsuleCollider.center = CacheCharacterController.center;
