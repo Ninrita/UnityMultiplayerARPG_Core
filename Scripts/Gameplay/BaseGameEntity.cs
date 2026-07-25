@@ -27,32 +27,8 @@ namespace MultiplayerARPG
 
         public virtual int EntityId
         {
-            get
-            {
-                if (MetaDataId != 0)
-                    return MetaDataId;
-                return HashAssetId;
-            }
+            get { return HashAssetId; }
             set { }
-        }
-
-        [SerializeField]
-        protected SyncFieldInt syncMetaDataId = new SyncFieldInt();
-        private int _metaDataId;
-        public int MetaDataId
-        {
-            get
-            {
-                if (syncMetaDataId.Value != 0)
-                    return syncMetaDataId.Value;
-                return _metaDataId;
-            }
-            set
-            {
-                if (CurrentGameManager.IsServer)
-                    syncMetaDataId.Value = value;
-                _metaDataId = value;
-            }
         }
 
         public bool ForceHide { get; set; }
@@ -472,7 +448,6 @@ namespace MultiplayerARPG
 
         protected virtual void SetupNetElements()
         {
-            syncMetaDataId.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             syncTitle.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             syncTitle.redundancyCount = 0;
             syncOverrideInput.syncMode = LiteNetLibSyncFieldMode.ServerToOwnerClient;

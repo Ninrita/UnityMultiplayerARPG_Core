@@ -12,6 +12,8 @@ namespace MultiplayerARPG
         [SerializeField]
         protected SyncFieldString id = new SyncFieldString();
         [SerializeField]
+        protected SyncFieldInt metaDataId = new SyncFieldInt();
+        [SerializeField]
         protected SyncFieldInt level = new SyncFieldInt();
         [SerializeField]
         protected SyncFieldInt exp = new SyncFieldInt();
@@ -61,6 +63,22 @@ namespace MultiplayerARPG
 
         #region Fields/Interface implementation
         public string Id { get { return id.Value; } set { id.Value = value; } }
+        private int _localMetaDataId;
+        public int MetaDataId
+        {
+            get
+            {
+                if (metaDataId.Value != 0)
+                    return metaDataId.Value;
+                return _localMetaDataId;
+            }
+            set
+            {
+                if (CurrentGameManager.IsServer)
+                    metaDataId.Value = value;
+                _localMetaDataId = value;
+            }
+        }
         public string CharacterName { get { return syncTitle.Value; } set { syncTitle.Value = value; } }
         public int Level { get { return level.Value; } set { level.Value = value; } }
         public int Exp { get { return exp.Value; } set { exp.Value = value; } }
@@ -318,6 +336,8 @@ namespace MultiplayerARPG
             // Sync fields
             id.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             id.redundancyCount = 0;
+            metaDataId.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
+            metaDataId.redundancyCount = 0;
             level.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             exp.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             isInvincible.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
@@ -344,8 +364,9 @@ namespace MultiplayerARPG
             summons.forOwnerOnly = true;
 
             // On data changed events
-            syncTitle.onChange += OnCharacterNameChange;
             id.onChange += OnIdChange;
+            syncTitle.onChange += OnCharacterNameChange;
+            metaDataId.onChange += OnMetaDataIdChange;
             level.onChange += OnLevelChange;
             exp.onChange += OnExpChange;
             isInvincible.onChange += OnIsInvincibleChange;
@@ -378,6 +399,7 @@ namespace MultiplayerARPG
             // On data changed events
             id.onChange -= OnIdChange;
             syncTitle.onChange -= OnCharacterNameChange;
+            metaDataId.onChange -= OnMetaDataIdChange;
             level.onChange -= OnLevelChange;
             exp.onChange -= OnExpChange;
             isInvincible.onChange -= OnIsInvincibleChange;
@@ -419,6 +441,14 @@ namespace MultiplayerARPG
         {
             if (onCharacterNameChange != null)
                 onCharacterNameChange.Invoke(this, oldCharacterName, characterName);
+        }
+
+        private void OnMetaDataIdChange(bool isInitial, int oldMetaDataId, int metaDataId)
+        {
+            _localMetaDataId = metaDataId;
+            IsRecaching = true;
+            if (onMetaDataIdChange != null)
+                onMetaDataIdChange.Invoke(this, oldMetaDataId, metaDataId);
         }
 
         private void OnLevelChange(bool isInitial, int oldLevel, int level)

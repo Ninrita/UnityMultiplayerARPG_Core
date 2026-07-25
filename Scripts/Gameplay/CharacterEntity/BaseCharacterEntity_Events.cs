@@ -18,6 +18,7 @@ namespace MultiplayerARPG
         // Sync variables
         public event CharacterEntityStringChangeDelegate onIdChange;
         public event CharacterEntityStringChangeDelegate onCharacterNameChange;
+        public event CharacterEntityInt32ChangeDelegate onMetaDataIdChange;
         public event CharacterEntityInt32ChangeDelegate onLevelChange;
         public event CharacterEntityInt32ChangeDelegate onExpChange;
         public event CharacterEntityBooleanChangeDelegate onIsInvincibleChange;

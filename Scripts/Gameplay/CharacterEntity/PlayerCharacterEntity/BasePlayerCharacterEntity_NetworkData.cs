@@ -427,7 +427,6 @@ namespace MultiplayerARPG
         {
             base.SetupNetElements();
             // Sync fields
-            syncMetaDataId.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             dataId.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             factionId.syncMode = LiteNetLibSyncFieldMode.ServerToClients;
             statPoint.syncMode = LiteNetLibSyncFieldMode.ServerToOwnerClient;
