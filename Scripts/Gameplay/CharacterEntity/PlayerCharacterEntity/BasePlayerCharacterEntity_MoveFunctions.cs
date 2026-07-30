@@ -6,7 +6,7 @@ namespace MultiplayerARPG
         {
             if (VendingComponent != null && VendingComponent.Data.isStarted)
                 return false;
-            if(IsWarping)
+            if (IsWarping)
                 return false;
             return base.CanMove_Implementation();
         }
